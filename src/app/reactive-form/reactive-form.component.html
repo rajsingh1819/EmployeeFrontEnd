@@ -1,0 +1,163 @@
+<nav class="navbar bg-primary" data-bs-theme="dark">
+
+  <div class="container-fluid">
+    <!-- Button trigger modal -->
+    <button type="button" (click)="clickAddEmployee()" class="btn btn-danger" data-bs-toggle="modal"
+      data-bs-target="#exampleModal">
+      Add Employee
+    </button>
+
+    <form class="d-flex" role="search">
+      <input class="form-control me-2" type="search" placeholder="type here for Search" value="search" name="search"
+        [(ngModel)]="searchText" aria-label="Search">
+      <!-- <button class="btn btn-light" type="submit">Search</button> -->
+    </form>
+  </div>
+</nav>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">S.No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Gender</th>
+      <th scope="col">occupation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of getArray   | filter :  searchText ;index as i ">
+      <td>{{i+1}}</td>
+      <td>{{data.name}}</td>
+      <td>{{data.email}}</td>
+      <td>{{data.phone}}</td>
+      <td>{{data.gender}}</td>
+      <td>{{data.occupation}}</td>
+      <td>
+        <button type="button" (click)="editApi(data)" class="btn btn-info" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">
+          Edit
+        </button>
+        <button (click)="deleteData(data)" class="btn btn-danger mx-3">Delete</button>
+
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Employee Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formValue">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"><b>Name</b></label>
+            <input type="text" class="form-control" id="exampleInputEmail1" formControlName="name"
+              aria-describedby="emailHelp"
+              [ngClass]="{error:  getControl('name')?.errors && getControl('name')?.touched}" required>
+            <div *ngIf="getControl('name')?.errors && getControl('name')?.touched">
+              <span *ngIf="getControl('name')?.errors?.['required']">*name is required</span>
+              <span *ngIf="getControl('name')?.errors?.['maxlength']">*only 30 character are allowed</span>
+
+
+            </div>
+
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail2" class="form-label"><b>Email address</b></label>
+            <input type="email" class="form-control" id="exampleInputEmail2" formControlName="email"
+              aria-describedby="emailHelp"
+              [ngClass]="{error: getControl('email')?.errors && getControl('email')?.touched}" required>
+            <div *ngIf="getControl('email')?.errors && getControl('email')?.touched">
+              <span *ngIf="getControl('email')?.errors?.['required']">*email is required</span>
+              <span *ngIf="getControl('email')?.errors?.['maxlength'] ">*only 30 character are allowed</span>
+              <span *ngIf="getControl('email')?.errors?.['pattern'] ">*please enter a valid email </span>
+
+            </div>
+
+
+
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword3" class="form-label"><b>Phone Number</b></label>
+            <input type="number" class="form-control" formControlName="phone" id="exampleInputPassword3"
+              [ngClass]="{error: getControl('phone')?.errors && getControl('phone')?.touched}" required>
+            <div *ngIf="getControl('phone')?.errors && getControl('phone')?.touched">
+              <span *ngIf="getControl('phone')?.errors?.['required']">*phone is required</span>
+              <span *ngIf="getControl('phone')?.errors?.['pattern'] ">*phone number should be min 10 characters
+                long</span>
+
+            </div>
+          </div>
+          <label for="option"> <b>Select your Gender :</b> </label>
+
+
+
+          <div class="form-check">
+
+            <input class="form-check-input" type="radio" formControlName="gender" value="Male" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+              Male
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" formControlName="gender" value="Female" id="flexRadioDefault2">
+            <label class="form-check-label" for="flexRadioDefault2">
+              Female
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" formControlName="gender" value="Other" id="flexRadioDefault3"
+              checked>
+            <label class="form-check-label" for="flexRadioDefault3">
+              Other
+            </label>
+          </div>
+
+          <br>
+
+          <select class="form-select" name="occuption" formControlName="occupation" [(ngModel)]="Default"
+            aria-label="Default select example">
+
+            <option [value]=null>Select your occupation</option>
+            <option value="Hr">Hr</option>
+            <option value="Developer">Developer</option>
+            <option value="Sales">Sales</option>
+            <option value="Cloud">Cloud</option>
+          </select>
+
+
+
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" *ngIf="showAdd" (click)="submit()" class="btn btn-primary">Submit</button>
+        <button type="submit" *ngIf="showUpdate" (click)="UpdateData()" class="btn btn-primary">Update</button>
+
+        <!-- [disabled]="!(formValue.valid && formValue.dirty)" -->
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
